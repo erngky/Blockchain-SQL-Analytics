@@ -5,8 +5,7 @@ WITH sol_in AS (
   SELECT 
 date_trunc('day', block_timestamp) AS date,
   sum(swap_from_amount) AS volume_in
-FROM solana.core.fact_swaps  
-  
+FROM solana.core.fact_swaps 
 WHERE swap_from_mint = 'So11111111111111111111111111111111111111112'
 AND swap_to_mint = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
 AND succeeded = 'TRUE'
@@ -15,19 +14,21 @@ AND block_timestamp >= current_date - 30
 GROUP BY date
 ORDER BY date ASC
 ),
+
+
 sol_out AS (
 SELECT 
 date_trunc('day', block_timestamp) AS date,
   sum(swap_to_amount) AS volume_out
 FROM solana.core.fact_swaps  
-  
 WHERE swap_to_mint = 'So11111111111111111111111111111111111111112'
 AND swap_from_mint = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
 AND succeeded = 'TRUE'
 AND swap_program = 'jupiter aggregator v2'
 AND block_timestamp >= current_date - 30
 GROUP BY date
-ORDER BY date ASC)
+ORDER BY date ASC
+)
 
 SELECT 
 a.date, 
